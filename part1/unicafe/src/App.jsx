@@ -5,7 +5,6 @@ const Button = ({handleClick, text}) =>{
     <button onClick={handleClick}>{text}</button>
   )
 }
-const Counter = ({handleClick, text}) => <div>{handleClick, text}</div>
 
 const All = ({good,neutral,bad}) => {
   return (
@@ -14,7 +13,7 @@ const All = ({good,neutral,bad}) => {
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
       <p>all {good + neutral + bad} </p>
-      <p>average {(good+ neutral + bad)/3}</p>
+      <p>average {(good-bad)/(good+neutral+bad)}</p>
       <p>positive { good /(good+ neutral + bad)*100 }</p>
     </div>
    
