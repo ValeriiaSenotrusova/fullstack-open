@@ -27,12 +27,12 @@ const App = () => {
   const addNewPerson = (event)=>{
     event.preventDefault()
 
-    /*const idDuplicate = persons.find(person => person.name.toLowerCase()===newName.toLowerCase())
+    const idDuplicate = persons.find(person => person.name.toLowerCase()===newName.toLowerCase())
 
     if (idDuplicate){
       alert(`${newName} is already added to phonebook`)
       return
-    }*/
+    }
     const newObject={
       name: newName,
       number: newNumber,
@@ -49,6 +49,19 @@ const App = () => {
 
   }
 
+   const deletePerson = (id,name) => {
+    if (window.confirm(`Delete ${name}?`))
+
+    phonesService
+      .deleteFrom(id)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== id))
+      })
+      .catch(error => {
+      alert( `the person '${name}' was already deleted from server`)
+    })
+  }  
+
  
   const handleChangeName=(event)=> setNewName(event.target.value)
   const handleChangeNumber=(event)=> setNewNumber(event.target.value)
@@ -62,7 +75,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm onSubmit={addNewPerson} newName={newName} handleChangeName={handleChangeName} newNumber={newNumber} handleChangeNumber={handleChangeNumber}/>
       <h2>Numbers</h2>
-      <Persons personToFind={personToFind}/>
+      <Persons personToFind={personToFind} deletePerson={deletePerson}/>
     </div>
   )
 }

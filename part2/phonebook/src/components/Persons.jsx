@@ -1,14 +1,18 @@
 
-const Persons = ({ personToFind }) => {
-   console.log('2.')
+const Persons = ({ personToFind, deletePerson}) => {
   return (
      <div>
-      {personToFind.map(persons =>
+      {personToFind.map(persons =>(
         <p key={persons.id}>
-          {persons.name} {persons.number}
+          {persons.name} {persons.number} 
+          <button onClick={() => deletePerson(persons.id, persons.name)}>
+            delete
+          </button>
         </p>
-      )}
-     </div>)
+     ) )}
+      
+     </div>
+     )
 }
 
 export default Persons
