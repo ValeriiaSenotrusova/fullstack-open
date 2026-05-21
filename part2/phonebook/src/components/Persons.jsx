@@ -1,9 +1,11 @@
+
 const Persons = ({ personToFind }) => {
+   console.log('2.')
   return (
      <div>
-      {personToFind.map(person =>
-        <p key={person.id}>
-          {person.name} {person.number}
+      {personToFind.map(persons =>
+        <p key={persons.id}>
+          {persons.name} {persons.number}
         </p>
       )}
      </div>)

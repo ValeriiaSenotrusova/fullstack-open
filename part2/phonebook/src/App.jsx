@@ -1,54 +1,59 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import phonesService from './services/phones'
+import phones from './services/phones'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber]= useState('')
   const [newFilter, setFilter]= useState('')
+  
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    console.log('1.')
+    phonesService
+      .getAll()
+      .then(initialPhones => setPersons(initialPhones))
   }, [])
 
-  console.log('render', persons.length, 'persons')
+    const personToFind = newFilter === ''
+    ? persons
+    : persons.filter(person=> person.name.toLowerCase().includes(newFilter.toLowerCase()))
 
-  const handleChangeName=(event)=> setNewName(event.target.value)
-  const handleChangeNumber=(event)=> setNewNumber(event.target.value)
-  const handleChangeFilter=(event)=> setFilter(event.target.value)
-  
   const addNewPerson = (event)=>{
     event.preventDefault()
 
-    const idDuplicate = persons.find(person => person.name.toLowerCase()===newName.toLowerCase())
+    /*const idDuplicate = persons.find(person => person.name.toLowerCase()===newName.toLowerCase())
 
     if (idDuplicate){
       alert(`${newName} is already added to phonebook`)
       return
-    }
+    }*/
     const newObject={
       name: newName,
       number: newNumber,
       id: String(persons.length+1),
     }
-    setPersons(persons.concat(newObject))
-    setNewName('')
-    setNewNumber('')
+
+    phonesService
+      .create(newObject)
+      .then(returnedPhone=> {
+        setPersons(persons.concat(returnedPhone))
+        setNewName('')
+        setNewNumber('')
+      })
+
   }
 
-  const personToFind = newFilter === ''
-    ? persons
-    : persons.filter(person=> person.name.toLowerCase().includes(newFilter.toLowerCase())
-)
+ 
+  const handleChangeName=(event)=> setNewName(event.target.value)
+  const handleChangeNumber=(event)=> setNewNumber(event.target.value)
+  const handleChangeFilter=(event)=> setFilter(event.target.value)
+  
 
   return (
     <div>
