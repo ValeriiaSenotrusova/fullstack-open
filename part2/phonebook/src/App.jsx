@@ -31,12 +31,11 @@ const App = () => {
 
     if (idDuplicate){
       alert(`${newName} is already added to phonebook`)
-      return
-    }
+      updatePhoneNumber(idDuplicate)
+    } else {
     const newObject={
       name: newName,
-      number: newNumber,
-      id: String(persons.length+1),
+      number: newNumber
     }
 
     phonesService
@@ -46,7 +45,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-
+    }
   }
 
    const deletePerson = (id,name) => {
@@ -61,6 +60,20 @@ const App = () => {
       alert( `the person '${name}' was already deleted from server`)
     })
   }  
+
+   const updatePhoneNumber = (idDuplicate) => {
+    if (window.confirm(`${idDuplicate.name} is already added to phonebook, replace the old number with a new one?`)){
+      const changedNumber = { ...idDuplicate, number: newNumber }
+
+      phonesService
+      .update(idDuplicate.id, changedNumber)
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== idDuplicate.id ? p : returnedPerson ))
+        setNewName('')
+        setNewNumber('')
+      })
+     }
+    }  
 
  
   const handleChangeName=(event)=> setNewName(event.target.value)
