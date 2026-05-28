@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import phonesService from './services/phones'
 import phones from './services/phones'
 
@@ -11,7 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber]= useState('')
   const [newFilter, setFilter]= useState('')
-  
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     console.log('1.')
@@ -42,6 +43,12 @@ const App = () => {
       .create(newObject)
       .then(returnedPhone=> {
         setPersons(persons.concat(returnedPhone))
+
+        setErrorMessage(`Added ${returnedPhone.name}`)
+        setTimeout(() => {
+        setErrorMessage(null)
+        }, 3000)
+
         setNewName('')
         setNewNumber('')
       })
@@ -69,6 +76,12 @@ const App = () => {
       .update(idDuplicate.id, changedNumber)
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== idDuplicate.id ? p : returnedPerson ))
+
+        setErrorMessage(`Updated number for ${returnedPerson.name}`)
+    
+        setTimeout(() => { setErrorMessage(null)
+        }, 3000)  
+
         setNewName('')
         setNewNumber('')
       })
@@ -84,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
        <Filter value={newFilter} onChange={handleChangeFilter}/>
       <h2>add a new</h2>
       <PersonForm onSubmit={addNewPerson} newName={newName} handleChangeName={handleChangeName} newNumber={newNumber} handleChangeNumber={handleChangeNumber}/>
