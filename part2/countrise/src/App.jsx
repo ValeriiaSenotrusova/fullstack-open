@@ -48,8 +48,11 @@ const App = () => {
           </div>
           : <ul>
             {countriesToFind.map(country=>
-              <li key={country.name.common}>{country.name.common}</li>
+              <li key={country.name.common}>{country.name.common}
+              <button onClick={() => setSearch(country.name.common)}>Show</button>
+              </li>
             )}
+            
           </ul>
 
 
