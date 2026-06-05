@@ -6,6 +6,8 @@ import Filter from './components/Filter'
 const App = () => {
   const[countrise, setCountries] = useState([])
   const[search, setSearch] = useState('')
+  const[weather, setWeather]= useState(null)
+  
   
 
   useEffect(() => {
@@ -15,14 +17,26 @@ const App = () => {
 
   },[])
 
+  useEffect(() =>{
+    if (countriesToFind.length === 1){
+      countriseService
+        .getWeather(countriesToFind[0].capital[0])
+        .then(data => setWeather(data))
+    }
+    
+  },[search])
+  console.log(weather)
+
   const countriesToFind = search === ''
   ? countrise
   : countrise.filter(country=>
     country.name.common.toLowerCase().includes(search.toLowerCase())
   )
 
+  console.log(weather)
 
   const handleChangeSearch=(event)=> setSearch(event.target.value)
+
   
   
   return (
@@ -40,10 +54,16 @@ const App = () => {
             <h2>Languages</h2>
             
             <ul>
-              {Object.values(countriesToFind[0].languages).map(lang => <li>{lang}</li> )}
+              {Object.values(countriesToFind[0].languages).map(lang => <li key={lang}>{lang}</li> )}
             </ul>
             <img src={countriesToFind[0].flags.png} alt={countriesToFind[0].name.common} width={200}/>
 
+            <h2>Weather in {countriesToFind[0].capital[0]}</h2>
+            <p>Temperature {weather && weather.main.temp}</p>
+            <img src={`https://openweathermap.org/img/wn/${weather && weather.weather[0].icon}@2x.png`}  />
+
+            <p>Wind {weather && weather.wind.speed} m/s</p>
+          
 
           </div>
           : <ul>
