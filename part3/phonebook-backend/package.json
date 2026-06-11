@@ -1,0 +1,25 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ValeriiaSenotrusova/fullstack-open#readme",
+  "bugs": {
+    "url": "https://github.com/ValeriiaSenotrusova/fullstack-open/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValeriiaSenotrusova/fullstack-open.git"
+  },
+  "license": "ISC",
+  "author": "Valeriia",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
