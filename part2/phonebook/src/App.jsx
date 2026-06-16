@@ -13,6 +13,8 @@ const App = () => {
   const [newNumber, setNewNumber]= useState('')
   const [newFilter, setFilter]= useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
+  
 
   useEffect(() => {
     console.log('1.')
@@ -24,6 +26,9 @@ const App = () => {
     const personToFind = newFilter === ''
     ? persons
     : persons.filter(person=> person.name.toLowerCase().includes(newFilter.toLowerCase()))
+
+
+
 
   const addNewPerson = (event)=>{
     event.preventDefault()
@@ -55,6 +60,8 @@ const App = () => {
     }
   }
 
+
+
    const deletePerson = (id,name) => {
     if (window.confirm(`Delete ${name}?`))
 
@@ -68,23 +75,40 @@ const App = () => {
     })
   }  
 
+
+
+
    const updatePhoneNumber = (idDuplicate) => {
     if (window.confirm(`${idDuplicate.name} is already added to phonebook, replace the old number with a new one?`)){
       const changedNumber = { ...idDuplicate, number: newNumber }
 
       phonesService
       .update(idDuplicate.id, changedNumber)
+
+
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== idDuplicate.id ? p : returnedPerson ))
 
+
+        setMessageType('success')
         setErrorMessage(`Updated number for ${returnedPerson.name}`)
     
-        setTimeout(() => { setErrorMessage(null)
+        setTimeout(() => { 
+          setErrorMessage(null)
+          setMessageType(null)
         }, 3000)  
-
+        
         setNewName('')
-        setNewNumber('')
+        setNewNumber('') 
       })
+       .catch(error =>{
+        setMessageType('error')
+        setErrorMessage(`Information of ${idDuplicate.name} has already been removed from server`)
+        setTimeout(()=>{
+          setErrorMessage(null)
+          setMessageType(null)
+        },3000)
+      }) 
      }
     }  
 
@@ -97,7 +121,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage} type={messageType} />
        <Filter value={newFilter} onChange={handleChangeFilter}/>
       <h2>add a new</h2>
       <PersonForm onSubmit={addNewPerson} newName={newName} handleChangeName={handleChangeName} newNumber={newNumber} handleChangeNumber={handleChangeNumber}/>
